@@ -195,6 +195,19 @@ export default function Home() {
           </p>
         </div>
       </div>
+
+      <footer className="mt-16 border-t border-slate-200 pt-8 text-center">
+        <p className="text-sm text-slate-500">
+          Made by {""}
+          <a
+            href="https://discord.com/users/410553521105010688"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-slate-700 hover:underline hover:text-black transition-colors"
+          > Daniel Dutra
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }
