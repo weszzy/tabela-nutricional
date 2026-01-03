@@ -5,6 +5,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-4-blueviolet)
+[![wakatime](https://wakatime.com/badge/user/bdeb95f3-d0ba-450e-bb85-f5c3aa2006a7/project/171cc631-0b8b-4979-8880-4d125c3bb065.svg)](https://wakatime.com/badge/user/bdeb95f3-d0ba-450e-bb85-f5c3aa2006a7/project/171cc631-0b8b-4979-8880-4d125c3bb065)
 
 Aplicação web para criação rápida e confiável de tabelas nutricionais no padrão ANVISA, voltada para produtores artesanais e indústrias que precisam gerar rótulos corretos sem depender de softwares caros ou processos manuais.
 
