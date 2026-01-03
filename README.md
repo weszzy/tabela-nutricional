@@ -10,6 +10,9 @@
 Aplicação web para criação rápida e confiável de tabelas nutricionais no padrão ANVISA, voltada para produtores artesanais e indústrias que precisam gerar rótulos corretos sem depender de softwares caros ou processos manuais.
 
 
+<img height="400" alt="preview" src="https://i.imgur.com/JUJGygS.png">
+
+
 ## Principais pontos:
 - Geração de tabelas nutricionais conforme RDC 429/2020 e IN 75/2020.
 - Cálculo automático de %VD (Valor Diário).
