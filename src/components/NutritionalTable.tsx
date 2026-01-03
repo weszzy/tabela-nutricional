@@ -59,9 +59,9 @@ export const NutritionalTable = ({ data, id }: Props) => {
 };
 
 const Row = ({ label, val, vd, isBold, indent, calc100, calcPorcao }: any) => (
-    <div className={`flex items-center border-b border-gray-300 py-[2px] ${isBold ? 'font-bold' : ''}`}>
+    <div className={`flex items-center border-b border-black py-[1px] ${isBold ? 'font-bold' : ''}`}>
         <span className={`flex-1 ${indent ? 'pl-3' : ''}`}>{label}</span>
-        <span className="w-12 text-center text-gray-600">{calc100(val)}</span>
+        <span className="w-12 text-center text-black">{calc100(val)}</span>
         <span className="w-12 text-center">{calcPorcao(val)}</span>
         <span className="w-8 text-center font-bold">{calcularVD(val, vd)}</span>
     </div>
