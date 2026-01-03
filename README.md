@@ -31,7 +31,7 @@ exportação é feita inteiramente no cliente, utilizando:
 - html-to-image para geração do PNG
 - jspdf para geração do PDF
 
-```
+```bash
 ⚠️ Importante: O componente exportável deve manter o id="tabela-export", conforme implementado em src/components/NutritionalTable.tsx. Alterar esse identificador quebrará a exportação.
 ```
 
