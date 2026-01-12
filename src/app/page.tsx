@@ -80,8 +80,6 @@ export default function Home() {
       {/* HEADER */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-
-          {/* Título */}
           <div className="flex items-center gap-2">
             <div className="bg-slate-900 text-white p-1.5 rounded-md">
               <Scale className="w-5 h-5" />
@@ -90,8 +88,6 @@ export default function Home() {
               Gerador Nutricional <span className="text-slate-400 font-normal text-sm ml-1">v1.0</span>
             </h1>
           </div>
-
-          {/* RDC Link */}
           <a
             href="https://www.in.gov.br/en/web/dou/-/resolucao-de-diretoria-colegiada-rdc-n-429-de-8-de-outubro-de-2020-282070599"
             target="_blank"
@@ -105,7 +101,6 @@ export default function Home() {
             </span>
             RDC 429/2020 Compliant
           </a>
-
         </div>
       </header>
 
@@ -160,13 +155,13 @@ export default function Home() {
                   <FormField control={form.control} name="medidaCaseira" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Medida Caseira (Texto)</FormLabel>
-                      <FormControl><Input {...field} value={field.value ?? ''} placeholder="Ex: 1 fatia, 2 biscoitos, 1 copo..." className="bg-slate-50 border-slate-200" /></FormControl>
+                      <FormControl><Input {...field} value={field.value ?? ''} placeholder="Ex: 1 fatia, 2 biscoitos..." className="bg-slate-50 border-slate-200" /></FormControl>
                     </FormItem>
                   )} />
                 </CardContent>
               </Card>
 
-              {/* MACRONUTRIENTES */}
+              {/* CARD 2: MACRONUTRIENTES */}
               <Card className="border-slate-200 shadow-sm overflow-hidden">
                 <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
                   <div className="flex items-center gap-2">
@@ -177,10 +172,8 @@ export default function Home() {
                 </CardHeader>
 
                 <CardContent className="p-6">
-                  {/* Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                    {/* --- Esquerda: Energia, Carbo, Fibra --- */}
+                    {/* Esquerda */}
                     <div className="space-y-6">
                       <InputNumber label="Valor Energético (kcal)" name="valorEnergetico" control={form.control} highlight />
                       <Separator />
@@ -195,7 +188,7 @@ export default function Home() {
                       <InputNumber label="Fibras Alimentares (g)" name="fibrasAlimentares" control={form.control} />
                     </div>
 
-                    {/* --- Direita: Proteína, Gordura, Sódio --- */}
+                    {/* Direita */}
                     <div className="space-y-6">
                       <InputNumber label="Proteínas (g)" name="proteinas" control={form.control} />
                       <Separator />
@@ -214,10 +207,9 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* --- PREVIEW & AÇÕES --- */}
+            {/* --- PREVIEW & AÇÕES */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24 h-fit">
 
-              {/* SELETOR DE LAYOUT */}
               <Tabs defaultValue="vertical" className="w-full" onValueChange={(v) => setLayout(v as "vertical" | "linear")}>
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="vertical">Vertical (Padrão)</TabsTrigger>
@@ -225,41 +217,27 @@ export default function Home() {
                 </TabsList>
               </Tabs>
 
-              {/* PREVIEW */}
-              <div className="bg-slate-100/80 rounded-xl p-4 border border-slate-200 flex justify-center items-center shadow-inner min-h-[400px] overflow-auto">
+              <div className="bg-slate-100/80 rounded-xl p-8 border border-slate-200 flex justify-center items-center shadow-inner min-h-[400px] overflow-auto">
                 <div className="bg-white shadow-xl transition-all duration-300 hover:scale-[1.02] origin-top">
-                  {/* Layout dinâmico */}
                   <NutritionalTable data={data} id="tabela-export" layout={layout} />
                 </div>
               </div>
 
-              {/* EXPORTAÇÃO */}
               <Card className="border-slate-200 shadow-sm">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base font-semibold text-slate-800">Exportar Arquivo</CardTitle>
                   <CardDescription>Pronto para impressão e embalagens.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-3">
-                  <Button
-                    type="button"
-                    onClick={handleExportPNG}
-                    className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium"
-                  >
+                  <Button type="button" onClick={handleExportPNG} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium">
                     <Download className="mr-2 h-4 w-4" /> Baixar PNG
                   </Button>
-
-                  <Button
-                    type="button"
-                    onClick={handleExportPDF}
-                    variant="outline"
-                    className="w-full border-slate-300 text-slate-700 hover:bg-slate-50"
-                  >
+                  <Button type="button" onClick={handleExportPDF} variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50">
                     <FileText className="mr-2 h-4 w-4" /> Baixar PDF
                   </Button>
                 </CardContent>
               </Card>
 
-              {/* DISCLAIMER */}
               <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 flex gap-3 items-start">
                 <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-xs text-amber-800 leading-relaxed">
@@ -271,7 +249,6 @@ export default function Home() {
         </Form>
       </main>
 
-      {/* FOOTER */}
       <footer className="border-t border-slate-50 bg-slate-50 py-8 mt-auto">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-sm text-slate-400 mb-2">
