@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toPng } from "html-to-image";
@@ -14,8 +15,11 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
+  const [layout, setLayout] = useState<"vertical" | "linear">("vertical");
+
   const form = useForm({
     resolver: zodResolver(nutriSchema),
     defaultValues: {
@@ -87,7 +91,7 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* RDC */}
+          {/* RDC Link */}
           <a
             href="https://www.in.gov.br/en/web/dou/-/resolucao-de-diretoria-colegiada-rdc-n-429-de-8-de-outubro-de-2020-282070599"
             target="_blank"
@@ -173,42 +177,30 @@ export default function Home() {
                 </CardHeader>
 
                 <CardContent className="p-6">
-                  {/* Desktop e Mobile */}
+                  {/* Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                    {/* --- Energia, Carbo, Fibra --- */}
+                    {/* --- Esquerda: Energia, Carbo, Fibra --- */}
                     <div className="space-y-6">
-
-                      {/* Valor Energético */}
                       <InputNumber label="Valor Energético (kcal)" name="valorEnergetico" control={form.control} highlight />
                       <Separator />
-
-                      {/* Carboidratos e Açúcares */}
                       <div className="space-y-3">
                         <InputNumber label="Carboidratos (g)" name="carboidratos" control={form.control} />
-
-                        {/* Açúcares */}
                         <div className="pl-4 border-l-2 border-slate-100 space-y-3 ml-1">
                           <InputNumber label="Açúcares Totais (g)" name="acucaresTotais" control={form.control} sub />
                           <InputNumber label="Açúcares Adic. (g)" name="acucaresAdicionados" control={form.control} sub />
                         </div>
                       </div>
-
                       <Separator />
                       <InputNumber label="Fibras Alimentares (g)" name="fibrasAlimentares" control={form.control} />
                     </div>
 
-                    {/* --- Proteína, Gordura, Sódio --- */}
+                    {/* --- Direita: Proteína, Gordura, Sódio --- */}
                     <div className="space-y-6">
-
-                      {/* Proteínas */}
                       <InputNumber label="Proteínas (g)" name="proteinas" control={form.control} />
                       <Separator />
-
-                      {/* Gorduras */}
                       <div className="space-y-3">
                         <InputNumber label="Gorduras Totais (g)" name="gordurasTotais" control={form.control} />
-                        {/* Sub-grupo Gorduras */}
                         <div className="pl-4 border-l-2 border-slate-100 space-y-3 ml-1">
                           <InputNumber label="Gorduras Saturadas (g)" name="gordurasSaturadas" control={form.control} sub />
                           <InputNumber label="Gorduras Trans (g)" name="gordurasTrans" control={form.control} sub />
@@ -222,17 +214,26 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* --- PREVIEW & AÇÕES  --- */}
+            {/* --- PREVIEW & AÇÕES --- */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24 h-fit">
 
+              {/* SELETOR DE LAYOUT */}
+              <Tabs defaultValue="vertical" className="w-full" onValueChange={(v) => setLayout(v as "vertical" | "linear")}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="vertical">Vertical (Padrão)</TabsTrigger>
+                  <TabsTrigger value="linear">Linear (Horizontal)</TabsTrigger>
+                </TabsList>
+              </Tabs>
+
               {/* PREVIEW */}
-              <div className="bg-slate-100/80 rounded-xl p-8 border border-slate-200 flex justify-center items-center shadow-inner min-h-[400px]">
-                <div className="bg-white shadow-xl transition-all duration-300 hover:scale-[1.02]">
-                  <NutritionalTable data={data} id="tabela-export" />
+              <div className="bg-slate-100/80 rounded-xl p-4 border border-slate-200 flex justify-center items-center shadow-inner min-h-[400px] overflow-auto">
+                <div className="bg-white shadow-xl transition-all duration-300 hover:scale-[1.02] origin-top">
+                  {/* Layout dinâmico */}
+                  <NutritionalTable data={data} id="tabela-export" layout={layout} />
                 </div>
               </div>
 
-              {/* CARD DE EXPORTAÇÃO */}
+              {/* EXPORTAÇÃO */}
               <Card className="border-slate-200 shadow-sm">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base font-semibold text-slate-800">Exportar Arquivo</CardTitle>
@@ -284,7 +285,6 @@ export default function Home() {
     </div>
   );
 }
-
 
 interface InputNumberProps {
   label: string;

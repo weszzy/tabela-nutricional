@@ -4,9 +4,10 @@ import { calcularVD, formatarValor } from "@/lib/calculations";
 interface Props {
     data: NutriFormData;
     id?: string;
+    layout?: "vertical" | "linear";
 }
 
-export const NutritionalTable = ({ data, id }: Props) => {
+export const NutritionalTable = ({ data, id, layout = "vertical" }: Props) => {
     const fator100 = data.porcaoQtd > 0 ? (100 / data.porcaoQtd) : 0;
 
     const calc100 = (val: number) => {
@@ -16,6 +17,49 @@ export const NutritionalTable = ({ data, id }: Props) => {
 
     const calcPorcao = (val: number) => formatarValor(val);
 
+    // --- MODELO LINEAR ---
+    if (layout === "linear") {
+        return (
+            <div
+                id={id}
+                className="bg-white p-6 min-w-[600px] w-fit font-sans text-black mx-auto leading-tight select-none"
+                style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
+            >
+                <div className="border-[3px] border-black p-3 text-sm">
+                    {/* Cabeçalho */}
+                    <div className="flex flex-wrap items-baseline gap-1 mb-2 font-bold">
+                        <span className="uppercase">Informação Nutricional:</span>
+                        <span>Porção: {data.porcaoQtd} {data.porcaoUnidade} ({data.medidaCaseira}).</span>
+                    </div>
+
+                    {/* Legenda */}
+                    <div className="text-[11px] text-gray-500 mb-2 italic">
+                        (Valores na ordem: 100 {data.porcaoUnidade} / Porção / %VD*)
+                    </div>
+
+                    {/* Lista de Nutrientes */}
+                    <div className="text-xs leading-5 text-justify">
+                        <LinearItem label="Valor energético (kcal)" val={data.valorEnergetico} vd="valorEnergetico" calc100={calc100} calcPorcao={calcPorcao} isBold />
+                        <LinearItem label="Carboidratos (g)" val={data.carboidratos} vd="carboidratos" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Açúcares totais (g)" val={data.acucaresTotais} vd="acucaresTotais" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Açúcares adic. (g)" val={data.acucaresAdicionados} vd="acucaresAdicionados" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Proteínas (g)" val={data.proteinas} vd="proteinas" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Gorduras totais (g)" val={data.gordurasTotais} vd="gordurasTotais" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Gorduras saturadas (g)" val={data.gordurasSaturadas} vd="gordurasSaturadas" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Gorduras trans (g)" val={data.gordurasTrans} vd="gordurasTrans" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Fibras alimentares (g)" val={data.fibrasAlimentares} vd="fibrasAlimentares" calc100={calc100} calcPorcao={calcPorcao} />
+                        <LinearItem label="Sódio (mg)" val={data.sodio} vd="sodio" calc100={calc100} calcPorcao={calcPorcao} isLast />
+                    </div>
+
+                    <div className="mt-2 text-[10px]">
+                        *Percentual de valores diários fornecidos pela porção.
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    // --- MODELO VERTICAL ---
     return (
         <div
             id={id}
@@ -66,3 +110,15 @@ const Row = ({ label, val, vd, isBold, indent, calc100, calcPorcao }: any) => (
         <span className="w-8 text-center font-bold">{calcularVD(val, vd)}</span>
     </div>
 );
+
+const LinearItem = ({ label, val, vd, isBold, calc100, calcPorcao, isLast }: any) => {
+    const vdValue = calcularVD(val, vd);
+    const vdDisplay = vdValue ? `${vdValue}%` : '';
+
+    return (
+        <span className={`mr-1 ${isBold ? 'font-bold' : ''}`}>
+            {label} {calc100(val)} <span className="text-gray-400">/</span> {calcPorcao(val)} <span className="text-gray-400">/</span> {vdDisplay}
+            {!isLast && <span className="mx-1">;</span>}
+        </span>
+    )
+}
