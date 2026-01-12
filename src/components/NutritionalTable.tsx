@@ -17,13 +17,11 @@ export const NutritionalTable = ({ data, id, layout = "vertical" }: Props) => {
 
     const calcPorcao = (val: number) => formatarValor(val);
 
-    // --- MODELO LINEAR (HORIZONTAL - ANEXO XV) ---
-
     if (layout === "linear") {
         return (
             <div
                 id={id}
-                className="bg-white p-6 min-w-[600px] w-fit font-sans text-black mx-auto leading-tight select-none"
+                className="bg-white p-6 w-full font-sans text-black mx-auto leading-tight select-none"
                 style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
             >
                 <div className="border-[3px] border-black p-3 text-sm">
@@ -60,6 +58,7 @@ export const NutritionalTable = ({ data, id, layout = "vertical" }: Props) => {
         )
     }
 
+    // --- MODELO VERTICAL  ---
     return (
         <div
             id={id}
