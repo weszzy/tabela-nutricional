@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useForm, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toPng } from "html-to-image";
-import jsPDF from "jspdf";
 import { Download, FileText, Info, ChefHat, Scale, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+
+import { useExport } from "@/hooks/useExport";
 
 import { nutriSchema, NutriFormData } from "@/lib/schema";
 import { NutritionalTable } from "@/components/NutritionalTable";
@@ -16,9 +17,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 export default function Home() {
   const [layout, setLayout] = useState<"vertical" | "linear">("vertical");
+  const { exportPNG, exportPDF, isExporting } = useExport();
 
   const form = useForm({
     resolver: zodResolver(nutriSchema),
@@ -44,34 +47,31 @@ export default function Home() {
   const data = form.watch() as NutriFormData;
 
   const handleExportPNG = async () => {
-    const element = document.getElementById("tabela-export");
-    if (!element) return;
     try {
-      const dataUrl = await toPng(element, { quality: 1.0, pixelRatio: 3, backgroundColor: 'white', style: { margin: '0' } });
-      const link = document.createElement("a");
-      link.download = `tabela-${data.medidaCaseira || 'nutricional'}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) { console.error(err); }
+      const filename = `tabela-${data.medidaCaseira || 'nutricional'}.png`;
+      await exportPNG("tabela-export", filename);
+      toast.success("PNG exportado com sucesso!", {
+        description: `Arquivo ${filename} foi baixado.`,
+      });
+    } catch (err) {
+      toast.error("Erro ao exportar PNG", {
+        description: err instanceof Error ? err.message : "Erro desconhecido",
+      });
+    }
   };
 
   const handleExportPDF = async () => {
-    const element = document.getElementById("tabela-export");
-    if (!element) return;
     try {
-      const dataUrl = await toPng(element, { quality: 1.0, pixelRatio: 3, backgroundColor: 'white', style: { margin: '0' } });
-      const img = new Image();
-      img.src = dataUrl;
-      img.onload = () => {
-        const pdf = new jsPDF({
-          orientation: img.width > img.height ? "landscape" : "portrait",
-          unit: "px",
-          format: [img.width, img.height]
-        });
-        pdf.addImage(dataUrl, "PNG", 0, 0, img.width, img.height);
-        pdf.save(`tabela-${data.medidaCaseira || 'nutricional'}.pdf`);
-      };
-    } catch (err) { console.error(err); }
+      const filename = `tabela-${data.medidaCaseira || 'nutricional'}.pdf`;
+      await exportPDF("tabela-export", filename);
+      toast.success("PDF exportado com sucesso!", {
+        description: `Arquivo ${filename} foi baixado.`,
+      });
+    } catch (err) {
+      toast.error("Erro ao exportar PDF", {
+        description: err instanceof Error ? err.message : "Erro desconhecido",
+      });
+    }
   };
 
   return (
@@ -229,11 +229,30 @@ export default function Home() {
                   <CardDescription>Pronto para impressão e embalagens.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-3">
-                  <Button type="button" onClick={handleExportPNG} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium">
-                    <Download className="mr-2 h-4 w-4" /> Baixar PNG
+                  <Button
+                    type="button"
+                    onClick={handleExportPNG}
+                    disabled={isExporting}
+                    className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium disabled:opacity-50"
+                  >
+                    {isExporting ? (
+                      <><LoadingSpinner size="sm" className="mr-2" /> Exportando...</>
+                    ) : (
+                      <><Download className="mr-2 h-4 w-4" /> Baixar PNG</>
+                    )}
                   </Button>
-                  <Button type="button" onClick={handleExportPDF} variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50">
-                    <FileText className="mr-2 h-4 w-4" /> Baixar PDF
+                  <Button
+                    type="button"
+                    onClick={handleExportPDF}
+                    disabled={isExporting}
+                    variant="outline"
+                    className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                  >
+                    {isExporting ? (
+                      <><LoadingSpinner size="sm" className="mr-2" /> Exportando...</>
+                    ) : (
+                      <><FileText className="mr-2 h-4 w-4" /> Baixar PDF</>
+                    )}
                   </Button>
                 </CardContent>
               </Card>

@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { NutriFormData } from "@/lib/schema";
 import { calcularVD, formatarValor } from "@/lib/calculations";
 
@@ -7,15 +8,44 @@ interface Props {
     layout?: "vertical" | "linear";
 }
 
-export const NutritionalTable = ({ data, id, layout = "vertical" }: Props) => {
-    const fator100 = data.porcaoQtd > 0 ? (100 / data.porcaoQtd) : 0;
+interface RowProps {
+    label: string;
+    val: number;
+    vd: string;
+    isBold?: boolean;
+    indent?: boolean;
+    calc100: (val: number) => string;
+    calcPorcao: (val: number) => string;
+}
 
-    const calc100 = (val: number) => {
-        if (val === 0) return "0";
-        return formatarValor(val * fator100);
-    };
+interface LinearItemProps {
+    label: string;
+    val: number;
+    vd: string;
+    isBold?: boolean;
+    calc100: (val: number) => string;
+    calcPorcao: (val: number) => string;
+    isLast?: boolean;
+}
 
-    const calcPorcao = (val: number) => formatarValor(val);
+export const NutritionalTable = memo(({ data, id, layout = "vertical" }: Props) => {
+    const fator100 = useMemo(
+        () => (data.porcaoQtd > 0 ? 100 / data.porcaoQtd : 0),
+        [data.porcaoQtd]
+    );
+
+    const calc100 = useMemo(
+        () => (val: number) => {
+            if (val === 0) return "0";
+            return formatarValor(val * fator100);
+        },
+        [fator100]
+    );
+
+    const calcPorcao = useMemo(
+        () => (val: number) => formatarValor(val),
+        []
+    );
 
     if (layout === "linear") {
         return (
@@ -99,25 +129,25 @@ export const NutritionalTable = ({ data, id, layout = "vertical" }: Props) => {
             </div>
         </div>
     );
-};
+});
 
-const Row = ({ label, val, vd, isBold, indent, calc100, calcPorcao }: any) => (
+const Row = memo(({ label, val, vd, isBold, indent, calc100, calcPorcao }: RowProps) => (
     <div className={`flex items-center border-b border-gray-300 py-[2px] ${isBold ? 'font-bold' : ''}`}>
         <span className={`flex-1 ${indent ? 'pl-3' : ''}`}>{label}</span>
         <span className="w-12 text-center text-gray-600">{calc100(val)}</span>
         <span className="w-12 text-center">{calcPorcao(val)}</span>
         <span className="w-8 text-center font-bold">{calcularVD(val, vd)}</span>
     </div>
-);
+));
 
-const LinearItem = ({ label, val, vd, isBold, calc100, calcPorcao, isLast }: any) => {
+const LinearItem = memo(({ label, val, vd, isBold, calc100, calcPorcao, isLast }: LinearItemProps) => {
     const vdValue = calcularVD(val, vd);
     const vdDisplay = vdValue ? `${vdValue}%` : '';
-    
+
     return (
         <span className={`mr-1 ${isBold ? 'font-bold' : ''}`}>
             {label} {calc100(val)} <span className="text-gray-400">/</span> {calcPorcao(val)} <span className="text-gray-400">/</span> {vdDisplay}
             {!isLast && <span className="mx-1">;</span>}
         </span>
     )
-}
+});
