@@ -51,7 +51,7 @@ export const NutritionalTable = memo(({ data, id, layout = "vertical" }: Props) 
         return (
             <div
                 id={id}
-                className="bg-white p-6 w-full font-sans text-black mx-auto leading-tight select-none"
+                className="bg-white w-full font-sans text-black mx-auto leading-tight select-none"
                 style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
             >
                 <div className="border-[3px] border-black p-3 text-sm">
@@ -92,7 +92,7 @@ export const NutritionalTable = memo(({ data, id, layout = "vertical" }: Props) 
     return (
         <div
             id={id}
-            className="bg-white p-8 min-w-[350px] w-fit font-sans text-black mx-auto leading-none select-none"
+            className="bg-white min-w-[350px] w-fit font-sans text-black mx-auto leading-none select-none"
             style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
         >
             <div className="border-[3px] border-black p-1">
